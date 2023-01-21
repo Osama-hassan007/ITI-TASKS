@@ -1,0 +1,7 @@
+cidr_block_vpc="10.0.0.0/16"
+availability_zone_proxy1="us-east-1a"
+cidr_block_proxy1="10.0.0.0/24"
+name-proxy1="proxy1-pub"
+availability_zone_proxy2="us-east-1b"
+cidr_block_proxy2="10.0.2.0/24"
+name-proxy2="proxy2-pub"
