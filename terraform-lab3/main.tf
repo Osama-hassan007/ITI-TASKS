@@ -47,6 +47,14 @@ module "ec2-proxy1" {
   ec2_key_name="saw-1"
   ec2-1-name="proxy1"
   local-exec-ec2="echo public_ip1  ${self.public_ip} >> ./public_ip.txt"
+  provisioner-reverse-proxy=[
+      "sudo apt update -y",
+      "sudo apt install -y nginx",
+      "echo 'server { \n listen 80 default_server; \n  listen [::]:80 default_server; \n  server_name _; \n  location / { \n  proxy_pass http://${module.ALB.alp-dns-private}; \n  } \n}' > default",
+      "sudo mv default /etc/nginx/sites-enabled/default",
+      "sudo systemctl stop nginx",
+      "sudo systemctl start nginx"
+  ]
 }
 
 module "ec2-proxy2" {
@@ -59,6 +67,14 @@ module "ec2-proxy2" {
   ec2_key_name="saw-1"
   ec2-1-name="proxy2"
   local-exec-ec2="echo public_ip2  ${self.public_ip} >> ./public_ip.txt"
+  provisioner-reverse-proxy=[
+      "sudo apt update -y",
+      "sudo apt install -y nginx",
+      "echo 'server { \n listen 80 default_server; \n  listen [::]:80 default_server; \n  server_name _; \n  location / { \n  proxy_pass http://${module.ALB.alp-dns-private}; \n  } \n}' > default",
+      "sudo mv default /etc/nginx/sites-enabled/default",
+      "sudo systemctl stop nginx",
+      "sudo systemctl start nginx"
+  ]
 }
 
 module "ALB" {
@@ -87,14 +103,7 @@ module "apache1" {
   subnet-id-for-ec2private=module.subnet-private1.private-subnet1
   sec-gr-private=[module.vpc.sec-gr-pub]
   ec2-private-name="apache1"
-  provisioner-reverse-proxy=[
-      "sudo apt update -y",
-      "sudo apt install -y nginx",
-      "echo 'server { \n listen 80 default_server; \n  listen [::]:80 default_server; \n  server_name _; \n  location / { \n  proxy_pass http://${module.ALB.alp-dns-private}; \n  } \n}' > default",
-      "sudo mv default /etc/nginx/sites-enabled/default",
-      "sudo systemctl stop nginx",
-      "sudo systemctl start nginx"
-  ]
+  
 }
 module "apache2" {
   source = "./ec2-private"
@@ -104,12 +113,5 @@ module "apache2" {
   subnet-id-for-ec2private=module.subnet-private2.private-subnet2
   sec-gr-private=[module.vpc.sec-gr-pub]
   ec2-private-name="apache2"
-  provisioner-reverse-proxy=[
-      "sudo apt update -y",
-      "sudo apt install -y nginx",
-      "echo 'server { \n listen 80 default_server; \n  listen [::]:80 default_server; \n  server_name _; \n  location / { \n  proxy_pass http://${module.ALB.alp-dns-private}; \n  } \n}' > default",
-      "sudo mv default /etc/nginx/sites-enabled/default",
-      "sudo systemctl stop nginx",
-      "sudo systemctl start nginx"
-  ]
+  
 }
