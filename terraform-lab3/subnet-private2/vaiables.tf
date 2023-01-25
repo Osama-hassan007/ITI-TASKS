@@ -11,3 +11,6 @@ variable "name-subnet_private2" {
 variable "availability_zone_subnet_private2" {
   type=string
 }
+variable "rw-private2-id" {
+  type=string
+}

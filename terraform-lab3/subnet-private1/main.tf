@@ -7,3 +7,7 @@ resource "aws_subnet" "private-sub1" {
     Name = var.name-subnet_private1
   }
 }
+resource "aws_route_table_association" "c" {
+  subnet_id      = aws_subnet.private-sub1.id
+  route_table_id = var.rw-private-id
+}
